@@ -33,7 +33,7 @@ class Plugin(CliPlugin):
         help = report.add_command(Syntax(
             'help', help='requires uplinks, route-reflector, statistics or summary keywords'), update_location=False, callback=self._show_help)
         vxlan = report.add_command(Syntax(
-            'help', help='requires uplinks, route-reflector, statistics or summary keywords'), update_location=False, callback=self._show_vxlan_info, schema=self._get_schema())
+            'vxlan', help='requires uplinks, route-reflector, statistics or summary keywords'), update_location=False, callback=self._show_vxlan_info, schema=self._get_schema())
 
     def _show_help(self, state, output, **_kwargs):
         print('''
@@ -45,7 +45,7 @@ class Plugin(CliPlugin):
         ''')
 
     def _show_vxlan_info(self, state, output, **_kwargs):
-        server_data = self._fetch_state(state, _kwargs[0])
+        server_data = self._fetch_state(state, _kwargs['arguments'])
         result = Data(self._get_schema())
         self._set_formatter_vxlan(result)
         data = result.vxlan_header.create()
@@ -75,6 +75,7 @@ class Plugin(CliPlugin):
             fields=['Tunnel Interface', 'VxLAN Interface', 'Type',
                     'Ingress VNI', 'Egress source-ip']
         )
+        return root
 
     def _fetch_state(self, state, arguments):
         # Retrieve the state from the management server
