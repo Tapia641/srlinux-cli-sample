@@ -79,6 +79,7 @@ class Plugin(CliPlugin):
             data = result.interface.create(interface.name)
             data.description = interface.description
             data.admin_state = interface.admin_state
+            print(str(data))
             self._add_children(data, interface.subinterface)
         return result
 
@@ -95,8 +96,7 @@ class Plugin(CliPlugin):
         """
         4. Agregue instancias de Formatter para determinar cómo se formatearán los datos.
         """
-        data.set_formatter('/interface', Border(TagValueFormatter(),
-                           Border.Above | Border.Below | Border.Between, '='))
+        data.set_formatter('/interface', Border(TagValueFormatter()))
         data.set_formatter('/interface/child', ColumnFormatter())
 
     def _print(self, state, arguments, output, **_kwargs):
