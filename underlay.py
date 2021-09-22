@@ -64,8 +64,9 @@ class Plugin(CliPlugin):
         """
         2. Recupere el estado del servidor de administración usando state.server_data_store.get_data y la ruta (<ruta>)
         """
-        name = arguments.get('name')
-        path = build_path('/interface[name={name}]/subinterface[index=*]')
+        # name = arguments.get('name')
+        path = build_path(
+            '/interface[name={name}]/subinterface[index=*]', name=arguments.get('name'))
         return state.server_data_store.get_data(path, recursive=True)
 
     def _populate_data(self, server_data):
@@ -96,8 +97,7 @@ class Plugin(CliPlugin):
         """
         data.set_formatter('/interface', Border(TagValueFormatter(),
                            Border.Above | Border.Below | Border.Between, '='))
-        data.set_formatter('/interface/child', Indent(ColumnFormatter(
-            ancestor_keys=False, borders=Borders.Header), indentation=2))
+        data.set_formatter('/interface/child', ColumnFormatter())
 
     def _print(self, state, arguments, output, **_kwargs):
         # Implement the callback method
